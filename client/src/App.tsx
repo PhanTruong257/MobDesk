@@ -1,25 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Header />
+        <Routes>
+          <Route path="/" element={<div style={{ marginTop: '80px', padding: '20px' }}>Home Page</div>} />
+          <Route path="/cart" element={<div style={{ marginTop: '80px', padding: '20px' }}>Cart Page</div>} />
+          <Route path="/login" element={<div style={{ marginTop: '80px', padding: '20px' }}>Login Page</div>} />
+          <Route path="/profile" element={<div style={{ marginTop: '80px', padding: '20px' }}>Profile Page</div>} />
+          <Route path="/admin/product-list" element={<div style={{ marginTop: '80px', padding: '20px' }}>Admin Products</div>} />
+          <Route path="/admin/order-list" element={<div style={{ marginTop: '80px', padding: '20px' }}>Admin Orders</div>} />
+          <Route path="/admin/user-list" element={<div style={{ marginTop: '80px', padding: '20px' }}>Admin Users</div>} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
