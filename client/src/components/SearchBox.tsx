@@ -70,6 +70,7 @@ const SearchWrapper = styled.div`
     cursor: pointer;
     border: 1px solid #ddd;
     transition: all 0.2s;
+    position: relative;
     
     &:hover {
       background: #e0e0e0;
@@ -80,6 +81,52 @@ const SearchWrapper = styled.div`
       background: rgb(150, 93, 93);
       color: white;
       border-color: rgb(150, 93, 93);
+    }
+    
+    &:hover .category-dropdown {
+      display: block;
+    }
+  }
+
+  .category-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin-top: 0.3rem;
+    
+    .dropdown-item {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      border-bottom: 1px solid #f5f5f5;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      &:hover {
+        background: #f8f9fa;
+        color: rgb(150, 93, 93);
+      }
+      
+      .item-name {
+        font-weight: 500;
+        color: #333;
+      }
+      
+      .item-count {
+        font-size: 0.8rem;
+        color: #666;
+        margin-left: 0.5rem;
+      }
     }
   }
 `;
@@ -97,10 +144,76 @@ const SearchBox: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [activeTag, setActiveTag] = useState<string>("");
 
-  // Popular search tags
+  // Popular search tags with subcategories
   const searchTags = [
-    "Electronics", "Phones", "Laptops", "Headphones",
-    "Cameras", "Gaming", "Fashion"
+    {
+      name: "Electronics",
+      subcategories: [
+        { name: "Smartphones", count: 145 },
+        { name: "Laptops", count: 89 },
+        { name: "Headphones", count: 67 },
+        { name: "Cameras", count: 34 },
+        { name: "Smart Watches", count: 56 }
+      ]
+    },
+    {
+      name: "Phones",
+      subcategories: [
+        { name: "iPhone", count: 45 },
+        { name: "Samsung", count: 38 },
+        { name: "Google Pixel", count: 22 },
+        { name: "OnePlus", count: 18 },
+        { name: "Accessories", count: 89 }
+      ]
+    },
+    {
+      name: "Laptops",
+      subcategories: [
+        { name: "MacBook", count: 25 },
+        { name: "Dell", count: 32 },
+        { name: "HP", count: 28 },
+        { name: "Gaming Laptops", count: 41 },
+        { name: "Business Laptops", count: 19 }
+      ]
+    },
+    {
+      name: "Gaming",
+      subcategories: [
+        { name: "Gaming Mice", count: 47 },
+        { name: "Keyboards", count: 39 },
+        { name: "Headsets", count: 52 },
+        { name: "Controllers", count: 31 },
+        { name: "Gaming Chairs", count: 23 }
+      ]
+    },
+    {
+      name: "Fashion",
+      subcategories: [
+        { name: "Men's Clothing", count: 156 },
+        { name: "Women's Clothing", count: 198 },
+        { name: "Shoes", count: 87 },
+        { name: "Accessories", count: 64 },
+        { name: "Bags", count: 43 }
+      ]
+    }, {
+      name: "Phones",
+      subcategories: [
+        { name: "iPhone", count: 45 },
+        { name: "Samsung", count: 38 },
+        { name: "Google Pixel", count: 22 },
+        { name: "OnePlus", count: 18 },
+        { name: "Accessories", count: 89 }
+      ]
+    }, {
+      name: "Phones",
+      subcategories: [
+        { name: "iPhone", count: 45 },
+        { name: "Samsung", count: 38 },
+        { name: "Google Pixel", count: 22 },
+        { name: "OnePlus", count: 18 },
+        { name: "Accessories", count: 89 }
+      ]
+    },
   ];
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -114,6 +227,12 @@ const SearchBox: React.FC = () => {
     setSearchTerm(tag);
     setActiveTag(tag);
     console.log("Tag selected:", tag);
+  };
+
+  const handleSubcategoryClick = (subcategory: string): void => {
+    setSearchTerm(subcategory);
+    setActiveTag(subcategory);
+    console.log("Subcategory selected:", subcategory);
   };
 
   return (
@@ -133,11 +252,26 @@ const SearchBox: React.FC = () => {
       <div className="tags-container">
         {searchTags.map((tag) => (
           <span
-            key={tag}
-            className={`tag ${activeTag === tag ? 'active' : ''}`}
-            onClick={() => handleTagClick(tag)}
+            key={tag.name}
+            className={`tag ${activeTag === tag.name ? 'active' : ''}`}
+            onClick={() => handleTagClick(tag.name)}
           >
-            {tag}
+            {tag.name}
+            <div className="category-dropdown">
+              {tag.subcategories.map((sub) => (
+                <div
+                  key={sub.name}
+                  className="dropdown-item"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSubcategoryClick(sub.name);
+                  }}
+                >
+                  <span className="item-name">{sub.name}</span>
+                  <span className="item-count">({sub.count})</span>
+                </div>
+              ))}
+            </div>
           </span>
         ))}
       </div>

@@ -44,7 +44,7 @@ const HeaderContainer = styled.div`
 
   /* Logo Button */
   .logo {
-    background:rgb(148, 41, 41);
+    background: rgb(148, 41, 41);
     border: none;
     color: #fff;
     cursor: pointer;
@@ -54,10 +54,91 @@ const HeaderContainer = styled.div`
     align-items: center;
     justify-content: center;
     transition: background 0.3s;
-     gap: 0.2rem;
+    gap: 0.2rem;
+    position: relative;
   }
   .logo:hover {
     background: rgba(255, 255, 255, 0.1);
+  }
+  .logo:hover .category-dropdown {
+    display: block;
+  }
+
+  /* Category Dropdown */
+  .category-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    min-width: 280px;
+    padding: 1rem 0;
+    margin-top: 0.5rem;
+    color: #333;
+    
+    .dropdown-section {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .section-title {
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+        color: rgb(204, 48, 48);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      
+      .dropdown-item {
+        padding: 0.6rem 1.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        
+        &:hover {
+          background: #f8f9fa;
+          color: rgb(204, 48, 48);
+          padding-left: 2rem;
+        }
+        
+        .item-icon {
+          font-size: 1.2rem;
+          width: 20px;
+        }
+        
+        .item-details {
+          flex: 1;
+          
+          .item-name {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+          }
+          
+          .item-desc {
+            font-size: 0.8rem;
+            color: #666;
+          }
+        }
+        
+        .item-count {
+          font-size: 0.8rem;
+          color: #999;
+          background: #f0f0f0;
+          padding: 0.2rem 0.5rem;
+          border-radius: 10px;
+        }
+      }
+    }
   }
 
   /* Navigation */
@@ -320,6 +401,37 @@ const Header: React.FC = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
     const [userDropdownOpen, setUserDropdownOpen] = React.useState(false);
 
+    // Category data for dropdown
+    const categories = [
+        {
+            title: "Electronics",
+            items: [
+                { name: "Smartphones", desc: "Latest mobile devices", icon: "📱", count: 245 },
+                { name: "Laptops", desc: "Business & Gaming", icon: "💻", count: 189 },
+                { name: "Headphones", desc: "Audio accessories", icon: "🎧", count: 156 },
+                { name: "Cameras", desc: "Photography gear", icon: "📷", count: 89 },
+                { name: "Smart Watches", desc: "Wearable tech", icon: "⌚", count: 134 }
+            ]
+        },
+        {
+            title: "Fashion",
+            items: [
+                { name: "Men's Clothing", desc: "Shirts, pants, suits", icon: "👔", count: 356 },
+                { name: "Women's Clothing", desc: "Dresses, tops, skirts", icon: "👗", count: 498 },
+                { name: "Shoes", desc: "Sneakers, boots, heels", icon: "👟", count: 287 },
+                { name: "Accessories", desc: "Bags, jewelry, belts", icon: "👜", count: 164 }
+            ]
+        },
+        {
+            title: "Gaming",
+            items: [
+                { name: "Gaming Mice", desc: "High precision gaming", icon: "🖱️", count: 87 },
+                { name: "Keyboards", desc: "Mechanical & wireless", icon: "⌨️", count: 69 },
+                { name: "Gaming Chairs", desc: "Ergonomic seating", icon: "🪑", count: 43 }
+            ]
+        }
+    ];
+
     const logoutHandler = async (): Promise<void> => {
         try {
             await logoutApiCall();
@@ -344,14 +456,40 @@ const Header: React.FC = () => {
         setMobileMenuOpen(false);
     };
 
+    const handleCategoryClick = (category: string) => {
+        console.log('Category selected:', category);
+        navigate(`/category/${category.toLowerCase().replace(/\s+/g, '-')}`);
+    };
+
     return (
         <HeaderContainer>
             <header className="header">
                 <div className="container">
                     <Link to="/" className="brand">MERN Shop</Link>
-                    <button className="logo" onClick={toggleMobileMenu}>
+                    <button className="logo">
                         <HamburgerIcon className="toggle-navhandler" />
                         <span className="text-white">Category</span>
+                        <div className="category-dropdown">
+                            {categories.map((section) => (
+                                <div key={section.title} className="dropdown-section">
+                                    <div className="section-title">{section.title}</div>
+                                    {section.items.map((item) => (
+                                        <div
+                                            key={item.name}
+                                            className="dropdown-item"
+                                            onClick={() => handleCategoryClick(item.name)}
+                                        >
+                                            <span className="item-icon">{item.icon}</span>
+                                            <div className="item-details">
+                                                <div className="item-name">{item.name}</div>
+                                                <div className="item-desc">{item.desc}</div>
+                                            </div>
+                                            <span className="item-count">{item.count}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
                     </button>
                     <SearchBox />
 
