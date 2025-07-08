@@ -9,7 +9,7 @@ const SearchWrapper = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid rgb(209, 200, 200);  // ✅ thêm khoảng trắng sau "solid"
-  border-radius: 8px;
+  border-radius: 20px;
   overflow: hidden;
   background: rgb(255, 255, 255);
 
@@ -21,7 +21,7 @@ const SearchWrapper = styled.div`
 
   
   input {
-    width: 300px;
+    width: 500px;
     background: transparent;
     border: none;
     color:  rgb(0, 0, 0);

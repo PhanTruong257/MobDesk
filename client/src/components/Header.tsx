@@ -42,6 +42,24 @@ const HeaderContainer = styled.div`
     color: #3EA6FF;
   }
 
+  /* Logo Button */
+  .logo {
+    background:rgb(148, 41, 41);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+     gap: 0.2rem;
+  }
+  .logo:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
   /* Navigation */
   .nav-links {
     display: flex;
@@ -228,12 +246,7 @@ const useSelector = (selector: (state: AppState) => any) => {
             ]
         },
         auth: {
-            userInfo: {
-                id: '1',
-                name: 'John Doe',
-                email: 'john@example.com',
-                isAdmin: false
-            }
+            userInfo: null
         }
     };
     return selector(fakeState);
@@ -333,9 +346,10 @@ const Header: React.FC = () => {
             <header className="header">
                 <div className="container">
                     <Link to="/" className="brand">MERN Shop</Link>
-                    <div className="logo">
+                    <button className="logo" onClick={toggleMobileMenu}>
                         <HamburgerIcon className="toggle-navhandler" />
-                    </div>
+                        <span className="text-white">Category</span>
+                    </button>
                     <SearchBox />
 
                     <nav className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
