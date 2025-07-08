@@ -77,10 +77,13 @@ const HeaderContainer = styled.div`
     border-radius: 8px;
     transition: all 0.3s;
     position: relative;
+    background: rgba(0, 0, 0, 0.1);
+    border: 0.2px solid rgba(255, 255, 255, 0.2);
   }
   .nav-link:hover {
-    background: #303030;
+    background: rgba(255, 255, 255, 0.2);
     color: #3EA6FF;
+    border-color: rgba(255, 255, 255, 0.3);
   }
 
   /* Cart Badge */
