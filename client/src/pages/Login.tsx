@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useLoginMutation, useRegisterMutation } from "../slices/userApiSlice";
+import { setCredentials } from '../slices/authSlice';
+import { useAppDispatch } from '../hooks/useAppDispatch';
 
 const LoginContainer = styled.div`
   min-height: 100vh;
@@ -229,6 +231,7 @@ const Login: React.FC = () => {
   });
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch(); // Sử dụng typed dispatch
 
   // RTK Query hooks
   const [loginMutation, { isLoading: isLoginLoading }] = useLoginMutation();
@@ -258,16 +261,17 @@ const Login: React.FC = () => {
           email: formData.email,
           password: formData.password
         }).unwrap();
+        console.log("Login result:", result);
 
         if (result.success && result.data) {
-          // Store tokens in localStorage
+          // Store tokens in localStorage (chỉ tokens)
           localStorage.setItem('accessToken', result.data.accessToken);
           localStorage.setItem('refreshToken', result.data.refreshToken);
-          localStorage.setItem('user', JSON.stringify(result.data.user));
+
+          dispatch(setCredentials(result.data.user));
 
           setSuccess("Login successful! Redirecting...");
 
-          // Redirect after short delay
           setTimeout(() => {
             navigate('/');
           }, 1500);
