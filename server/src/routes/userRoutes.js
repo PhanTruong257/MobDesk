@@ -14,7 +14,7 @@ router.get('/profile', authenticateToken, asyncHandler(UserController.getProfile
 router.put('/profile', authenticateToken, asyncHandler(UserController.updateProfile));
 router.post('/logout', authenticateToken, asyncHandler(UserController.logout));
 router.post('/logout-all', authenticateToken, asyncHandler(UserController.logoutAll));
-
+    
 // Admin routes
 router.get('/', authenticateToken, requireAdmin, validatePagination, asyncHandler(UserController.getAllUsers));
 router.get('/:id', authenticateToken, requireAdmin, asyncHandler(UserController.getUserById));

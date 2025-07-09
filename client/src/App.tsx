@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './store';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { AppRoutes, shouldShowLayout } from './routes';
@@ -35,9 +37,11 @@ const AppLayout: React.FC = () => {
 
 function App() {
   return (
-    <Router>
-      <AppLayout />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <AppLayout />
+      </Router>
+    </Provider>
   );
 }
 
