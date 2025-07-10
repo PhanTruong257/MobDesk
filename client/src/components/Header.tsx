@@ -188,17 +188,13 @@ const HeaderContainer = styled.div`
 
   /* User Dropdown */
   .user-dropdown {
-    position: relative;
-  }
-  .dropdown-toggle {
-    background: transparent;
-    border: none;
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s;
+    position: relative;
+        padding: 0.5rem 1rem;
+
+    
   }
+ 
   .user-dropdown:hover .dropdown-menu {
   opacity: 1;
   visibility: visible;
@@ -242,6 +238,8 @@ const HeaderContainer = styled.div`
   }
   .dropdown-menu a:hover, .dropdown-menu button:hover {
     background: rgb(99, 32, 32);
+        border-radius: 8px;
+
   }
 
   /* Mobile Toggle */
@@ -344,7 +342,6 @@ const Header: React.FC = () => {
   const [logoutApiCall] = useLogoutMutation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   let storedUser: StoredUser | null;
 
@@ -392,7 +389,6 @@ const Header: React.FC = () => {
       localStorage.removeItem('refreshToken');
 
       // Clear local state
-      setUserDropdownOpen(false);
 
       navigate('/login');
       toast.success('Logout successful');
@@ -411,9 +407,7 @@ const Header: React.FC = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  const toggleUserDropdown = () => {
-    setUserDropdownOpen(!userDropdownOpen);
-  };
+
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
@@ -469,12 +463,9 @@ const Header: React.FC = () => {
 
             {storedUser ? (
               <div className="user-dropdown">
-                <button
-                  className="dropdown-toggle"
-                  onClick={toggleUserDropdown}
-                >
-                  Hello👋, {storedUser.name}
-                </button>
+
+                Hello👋, {storedUser.name}
+
                 <div className="dropdown-menu ">
                   <Link to="/profile" onClick={closeMobileMenu}>Profile</Link>
                   <button onClick={logoutHandler}>Logout</button>
