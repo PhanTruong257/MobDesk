@@ -266,41 +266,44 @@ const HeaderContainer = styled.div`
 
   /* Mobile Styles */
   @media screen and (max-width: 768px) {
+    .container {
+      flex-direction: column; /* Sắp xếp theo chiều dọc */
+      align-items: center;
+      gap: 1rem; /* Thêm khoảng cách giữa các phần tử */
+    }
+
+    .brand {
+      font-size: 1.2rem; /* Giảm kích thước chữ */
+    }
+
+    .logo {
+      display: none; /* Ẩn logo trên mobile */
+    }
     .nav-links {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 300px;
-      height: 100vh;
-      background: #1a1a1a;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding: 5rem 2rem 2rem;
-      transition: right 0.3s;
+      display: none;  
+  }
+
+    .nav-links {
+      flex-direction: column; /* Sắp xếp các link theo chiều dọc */
+      gap: 1rem; /* Thêm khoảng cách giữa các link */
     }
-    .nav-links.active {
-      right: 0;
-    }
+
     .mobile-toggle {
-      display: block;
+      display: none; /* Hiển thị nút toggle */
+      margin-top: 1rem;
     }
+
     .mobile-overlay {
       display: block;
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s;
     }
+
     .mobile-overlay.active {
       opacity: 1;
       visibility: visible;
     }
-        .logo {
-   flex: 1; 
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    gap: 1rem;
-  }
   }
 `;
 

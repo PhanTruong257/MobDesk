@@ -20,7 +20,8 @@ const SearchWrapper = styled.div`
   }
   
   input {
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
     background: transparent;
     border: none;
     color: rgb(0, 0, 0);
@@ -86,7 +87,9 @@ const SearchWrapper = styled.div`
     &:hover .category-dropdown {
       display: block;
     }
+      
   }
+    
 
   .category-dropdown {
     display: none;
@@ -129,6 +132,28 @@ const SearchWrapper = styled.div`
       }
     }
   }
+   @media (max-width: 768px) {
+    .tags-container {
+      display: none; /* Ẩn các tag */
+    }
+
+    form {
+      flex-direction: column; /* Sửa lỗi trình bày */
+      align-items: stretch;
+    }
+
+    input {
+      width: 100%; /* Đảm bảo input chiếm toàn bộ chiều rộng */
+    }
+
+    .search-btn {
+      width: 100%; /* Đảm bảo nút tìm kiếm chiếm toàn bộ chiều rộng */
+      justify-content: center;
+    }
+  }
+}
+
+    
 `;
 
 // Icon Components
