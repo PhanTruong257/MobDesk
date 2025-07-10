@@ -199,18 +199,23 @@ const HeaderContainer = styled.div`
     cursor: pointer;
     transition: background 0.3s;
   }
-  .dropdown-toggle:hover {
-    background: #303030;
-  }
+  .user-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+ 
+
   .dropdown-menu {
     position: absolute;
     top: 100%;
     right: 0;
-    background: #1a1a1a;
+    background:rgb(194, 49, 49);
     border: 1px solid #303030;
     border-radius: 8px;
     min-width: 150px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(204, 112, 112, 0.3);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -232,9 +237,11 @@ const HeaderContainer = styled.div`
     text-align: left;
     cursor: pointer;
     transition: background 0.3s;
+    margin: 0;
+    box-sizing: border-box;
   }
   .dropdown-menu a:hover, .dropdown-menu button:hover {
-    background: #303030;
+    background: rgb(99, 32, 32);
   }
 
   /* Mobile Toggle */
@@ -339,13 +346,13 @@ const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
-    let storedUser: StoredUser | null;
+  let storedUser: StoredUser | null;
 
-    storedUser = parseUserFromStorage();  
-    useEffect(() => {
-      console.log('Stored user:', storedUser);
-    }, []);
-   const categories = [
+  storedUser = parseUserFromStorage();
+  useEffect(() => {
+    console.log('Stored user:', storedUser);
+  }, []);
+  const categories = [
     {
       title: "Electronics",
       items: [
@@ -468,7 +475,7 @@ const Header: React.FC = () => {
                 >
                   Hello👋, {storedUser.name}
                 </button>
-                <div className={`dropdown-menu ${userDropdownOpen ? 'show' : ''}`}>
+                <div className="dropdown-menu ">
                   <Link to="/profile" onClick={closeMobileMenu}>Profile</Link>
                   <button onClick={logoutHandler}>Logout</button>
                   {(storedUser.role === "admin" || storedUser.isAdmin) && (
