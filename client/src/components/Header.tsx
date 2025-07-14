@@ -467,7 +467,7 @@ const Header: React.FC = () => {
             {storedUser ? (
               <div className="user-dropdown">
 
-                Hello👋, {storedUser.name}
+                Hello👋 {storedUser.name}
 
                 <div className="dropdown-menu ">
                   <Link to="/profile" onClick={closeMobileMenu}>Profile</Link>

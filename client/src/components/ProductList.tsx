@@ -6,7 +6,7 @@ const ProductsContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
-  margin-top: 100px; /* Account for fixed header */
+  margin-top: 1rem; /* Account for fixed header */
 
   .products-header {
     text-align: center;
