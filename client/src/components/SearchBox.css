@@ -1,0 +1,179 @@
+/* SearchBox.css */
+.search-wrapper {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.form-search {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgb(209, 200, 200);
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgb(255, 255, 255);
+}
+
+form:focus-within {
+    border-color: #3EA6FF;
+}
+
+input {
+    width: 100%;
+     background: transparent;
+    border: none;
+    color: rgb(0, 0, 0);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+input::placeholder {
+    color: rgb(0, 0, 0);
+}
+
+.search-btn {
+    background: rgb(150, 93, 93);
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn:hover {
+    background: rgb(179, 135, 135);
+}
+
+.search-btn svg {
+    width: 18px;
+    height: 18px;
+    color: #fff;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0 0.5rem;
+}
+
+.tag {
+    background: #f0f0f0;
+    color: #333;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.tag:hover {
+    background: #e0e0e0;
+    border-color: #bbb;
+}
+
+.tag.active {
+    background: rgb(150, 93, 93);
+    color: white;
+    border-color: rgb(150, 93, 93);
+}
+
+.tag:hover .category-dropdown {
+    display: block;
+}
+
+.category-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin-top: 0.3rem;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background: #f8f9fa;
+    color: rgb(150, 93, 93);
+}
+
+.item-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.item-count {
+    font-size: 0.8rem;
+    color: #666;
+    margin-left: 0.5rem;
+}
+.form-search input::placeholder {
+    color: #aaa;
+}
+
+@media (max-width: 768px) {
+    .search-wrapper {
+        position: relative;
+        width: 90%;
+ 
+    }
+
+    .search-wrapper input {
+
+        padding: 10px 40px 10px 12px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    .search-btn {
+        background-color: #c97a62 !important;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 30px;
+        width: 30px;
+        border-radius: 16px;
+
+    }
+
+
+
+    .tags-container {
+        display: none;
+    }
+
+
+
+
+
+}

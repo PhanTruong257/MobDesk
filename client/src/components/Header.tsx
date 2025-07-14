@@ -1,311 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import SearchBox from './SearchBox';
 import { useLogoutMutation, useGetUserProfileQuery } from '../slices/userApiSlice';
 import { useAppSelector } from '../hooks/useAppSelector';
 import { StoredUser, parseUserFromStorage } from '../types/StoreUser';
 import { setCredentials } from '../slices/authSlice';
-
-// All-in-one Styled Component
-const HeaderContainer = styled.div`
-  /* Header Wrapper */
-  .header {
-    background: rgb(204, 48, 48);
-    color: #fff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    padding: 1rem 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  }
-
-  /* Container */
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
-  }
-
-  /* Brand */
-  .brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  .brand:hover {
-    color: #3EA6FF;
-  }
-
-  /* Logo Button */
-  .logo {
-    background: rgb(148, 41, 41);
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s;
-    gap: 0.2rem;
-    position: relative;
-  }
-  .logo:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  .logo:hover .category-dropdown {
-    display: block;
-  }
-
-  /* Category Dropdown */
-  .category-dropdown {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    z-index: 1001;
-    min-width: 280px;
-    padding: 1rem 0;
-    margin-top: 0.5rem;
-    color: #333;
-    
-    .dropdown-section {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #f0f0f0;
-      
-      &:last-child {
-        border-bottom: none;
-      }
-      
-      .section-title {
-        padding: 0.5rem 1rem;
-        font-weight: bold;
-        color: rgb(204, 48, 48);
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-      
-      .dropdown-item {
-        padding: 0.6rem 1.5rem;
-        cursor: pointer;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        
-        &:hover {
-          background: #f8f9fa;
-          color: rgb(204, 48, 48);
-          padding-left: 2rem;
-        }
-        
-        .item-icon {
-          font-size: 1.2rem;
-          width: 20px;
-        }
-        
-        .item-details {
-          flex: 1;
-          
-          .item-name {
-            font-weight: 500;
-            margin-bottom: 0.2rem;
-          }
-          
-          .item-desc {
-            font-size: 0.8rem;
-            color: #666;
-          }
-        }
-        
-        .item-count {
-          font-size: 0.8rem;
-          color: #999;
-          background: #f0f0f0;
-          padding: 0.2rem 0.5rem;
-          border-radius: 10px;
-        }
-      }
-    }
-  }
-
-  /* Navigation */
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .nav-link {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    transition: all 0.3s;
-    position: relative;
-    background: rgba(0, 0, 0, 0.1);
-    border: 0.2px solid rgba(255, 255, 255, 0.2);
-  }
-  .nav-link:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #3EA6FF;
-    border-color: rgba(255, 255, 255, 0.3);
-  }
-
-  /* Cart Badge */
-  .cart-badge {
-    background: #ffc107;
-    color: #000;
-    border-radius: 50%;
-    padding: 0.2rem 0.5rem;
-    font-size: 0.8rem;
-    font-weight: bold;
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    min-width: 20px;
-    text-align: center;
-  }
-
-  /* User Dropdown */
-  .user-dropdown {
-    cursor: pointer;
-    position: relative;
-        padding: 0.5rem 1rem;
-
-    
-  }
- 
-  .user-dropdown:hover .dropdown-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
- 
-
-  .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background:rgb(194, 49, 49);
-    border: 1px solid #303030;
-    border-radius: 8px;
-    min-width: 150px;
-    box-shadow: 0 4px 20px rgba(204, 112, 112, 0.3);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s;
-  }
-  .dropdown-menu.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  .dropdown-menu a, .dropdown-menu button {
-    display: block;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    background: transparent;
-    border: none;
-    color: #fff;
-    text-decoration: none;
-    text-align: left;
-    cursor: pointer;
-    transition: background 0.3s;
-    margin: 0;
-    box-sizing: border-box;
-  }
-  .dropdown-menu a:hover, .dropdown-menu button:hover {
-    background: rgb(99, 32, 32);
-        border-radius: 8px;
-
-  }
-
-  /* Mobile Toggle */
-  .mobile-toggle {
-    display: none;
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-    cursor: pointer;
-  }
-
-  /* Mobile Overlay */
-  .mobile-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-  }
-
-  /* Mobile Styles */
-  @media screen and (max-width: 768px) {
-    .container {
-      flex-direction: column; /* Sắp xếp theo chiều dọc */
-      align-items: center;
-      gap: 1rem; /* Thêm khoảng cách giữa các phần tử */
-    }
-
-    .brand {
-      font-size: 1.2rem; /* Giảm kích thước chữ */
-    }
-
-    .logo {
-      display: none; /* Ẩn logo trên mobile */
-    }
-    .nav-links {
-      display: none;  
-  }
-
-    .nav-links {
-      flex-direction: column; /* Sắp xếp các link theo chiều dọc */
-      gap: 1rem; /* Thêm khoảng cách giữa các link */
-    }
-
-    .mobile-toggle {
-      display: none; /* Hiển thị nút toggle */
-      margin-top: 1rem;
-    }
-
-    .mobile-overlay {
-      display: block;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s;
-    }
-
-    .mobile-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-`;
+import './Header.css';
 
 // Types for user and cart data 
 
@@ -422,7 +123,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <HeaderContainer>
+    <React.Fragment>
       <header className="header">
         <div className="container">
           <Link to="/" className="brand">MERN Shop</Link>
@@ -456,7 +157,8 @@ const Header: React.FC = () => {
           <nav className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
             <Link to="/cart" onClick={closeMobileMenu} className="nav-link">
               <ShoppingCartIcon />
-              Cart
+              <span className="cart-text">Cart</span>
+
 
               <span className="cart-badge">
                 3
@@ -499,7 +201,7 @@ const Header: React.FC = () => {
         className={`mobile-overlay ${mobileMenuOpen ? 'active' : ''}`}
         onClick={closeMobileMenu}
       />
-    </HeaderContainer>
+    </React.Fragment>
   );
 };
 

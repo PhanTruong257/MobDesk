@@ -1,271 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-
-const AdminContainer = styled.div`
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
-  min-height: 100vh;
-`;
-
-const AdminHeader = styled.div`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 2rem;
-  border-radius: 20px;
-  margin-bottom: 2rem;
-  
-  h1 {
-    margin: 0 0 0.5rem 0;
-    font-size: 2.5rem;
-  }
-  
-  p {
-    margin: 0;
-    opacity: 0.9;
-  }
-`;
-
-const StatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-`;
-
-const StatCard = styled.div`
-  background: white;
-  padding: 1.5rem;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #667eea;
-  
-  .stat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  
-  .stat-title {
-    color: #666;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  
-  .stat-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-  }
-  
-  .stat-number {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 0.5rem;
-  }
-  
-  .stat-change {
-    font-size: 0.8rem;
-    color: #28a745;
-    
-    &.negative {
-      color: #dc3545;
-    }
-  }
-`;
-
-const AdminTabs = styled.div`
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #e1e5e9;
-  
-  @media (max-width: 768px) {
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-`;
-
-const Tab = styled.button<{ active: boolean }>`
-  padding: 1rem 1.5rem;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-weight: 600;
-  color: ${props => props.active ? "#667eea" : "#666"};
-  border-bottom: 2px solid ${props => props.active ? "#667eea" : "transparent"};
-  transition: all 0.3s;
-  white-space: nowrap;
-  
-  &:hover {
-    color: #667eea;
-  }
-`;
-
-const TabContent = styled.div`
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-`;
-
-const TableContainer = styled.div`
-  overflow-x: auto;
-  border-radius: 10px;
-  border: 1px solid #e1e5e9;
-`;
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  
-  th, td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid #e1e5e9;
-  }
-  
-  th {
-    background: #f8f9fa;
-    font-weight: 600;
-    color: #333;
-  }
-  
-  tr:hover {
-    background: #f8f9fa;
-  }
-`;
-
-const ActionButton = styled.button<{ variant?: 'primary' | 'danger' | 'success' }>`
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-right: 0.5rem;
-  transition: all 0.3s;
-  
-  ${props => {
-        switch (props.variant) {
-            case 'danger':
-                return `
-          background: #dc3545;
-          color: white;
-          &:hover { background: #c82333; }
-        `;
-            case 'success':
-                return `
-          background: #28a745;
-          color: white;
-          &:hover { background: #218838; }
-        `;
-            default:
-                return `
-          background: #667eea;
-          color: white;
-          &:hover { background: #5a6fd8; }
-        `;
-        }
-    }}
-`;
-
-const AddButton = styled.button`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-bottom: 1.5rem;
-  transition: transform 0.2s;
-  
-  &:hover {
-    transform: translateY(-2px);
-  }
-`;
-
-const FormGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-`;
-
-const FormGroup = styled.div`
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #333;
-    font-weight: 500;
-  }
-  
-  input, select, textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid #e1e5e9;
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-    
-    &:focus {
-      outline: none;
-      border-color: #667eea;
-    }
-  }
-  
-  textarea {
-    resize: vertical;
-    min-height: 100px;
-  }
-`;
-
-const StatusBadge = styled.span<{ status: string }>`
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  
-  ${props => {
-        switch (props.status) {
-            case 'active':
-                return `
-          background: #e8f5e8;
-          color: #2e7d2e;
-        `;
-            case 'inactive':
-                return `
-          background: #f8d7da;
-          color: #721c24;
-        `;
-            case 'pending':
-                return `
-          background: #fff3e0;
-          color: #f57c00;
-        `;
-            default:
-                return `
-          background: #e3f2fd;
-          color: #1976d2;
-        `;
-        }
-    }}
-`;
+import './Admin.css';
 
 const Admin: React.FC = () => {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -301,68 +35,68 @@ const Admin: React.FC = () => {
         switch (activeTab) {
             case "dashboard":
                 return (
-                    <TabContent>
+                    <div className="tab-content">
                         <h3 style={{ marginBottom: "1.5rem" }}>Dashboard Overview</h3>
-                        <StatsGrid>
+                        <div className="stats-grid">
                             {stats.map((stat, index) => (
-                                <StatCard key={index}>
+                                <div className="stat-card" key={index}>
                                     <div className="stat-header">
                                         <div className="stat-title">{stat.title}</div>
                                         <div className="stat-icon">{stat.icon}</div>
                                     </div>
                                     <div className="stat-number">{stat.value}</div>
                                     <div className="stat-change">{stat.change}</div>
-                                </StatCard>
+                                </div>
                             ))}
-                        </StatsGrid>
-                    </TabContent>
+                        </div>
+                    </div>
                 );
 
             case "products":
                 return (
-                    <TabContent>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+                    <div className="tab-content">
+                        <div className="header-actions">
                             <h3>Product Management</h3>
-                            <AddButton onClick={() => setShowAddProduct(!showAddProduct)}>
+                            <button className="add-button" onClick={() => setShowAddProduct(!showAddProduct)}>
                                 {showAddProduct ? "Cancel" : "Add Product"}
-                            </AddButton>
+                            </button>
                         </div>
 
                         {showAddProduct && (
-                            <div style={{ marginBottom: "2rem", padding: "1.5rem", background: "#f8f9fa", borderRadius: "10px" }}>
+                            <div className="add-product-form">
                                 <h4>Add New Product</h4>
-                                <FormGrid>
-                                    <FormGroup>
+                                <div className="form-grid">
+                                    <div className="form-group">
                                         <label>Product Name</label>
                                         <input type="text" placeholder="Enter product name" />
-                                    </FormGroup>
-                                    <FormGroup>
+                                    </div>
+                                    <div className="form-group">
                                         <label>Price</label>
                                         <input type="number" placeholder="0.00" />
-                                    </FormGroup>
-                                    <FormGroup>
+                                    </div>
+                                    <div className="form-group">
                                         <label>Stock</label>
                                         <input type="number" placeholder="0" />
-                                    </FormGroup>
-                                    <FormGroup>
+                                    </div>
+                                    <div className="form-group">
                                         <label>Category</label>
                                         <select>
                                             <option>Electronics</option>
                                             <option>Clothing</option>
                                             <option>Books</option>
                                         </select>
-                                    </FormGroup>
-                                </FormGrid>
-                                <FormGroup>
+                                    </div>
+                                </div>
+                                <div className="form-group">
                                     <label>Description</label>
                                     <textarea placeholder="Enter product description"></textarea>
-                                </FormGroup>
-                                <ActionButton>Save Product</ActionButton>
+                                </div>
+                                <button className="action-button">Save Product</button>
                             </div>
                         )}
 
-                        <TableContainer>
-                            <Table>
+                        <div className="table-container">
+                            <table className="product-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -381,26 +115,26 @@ const Admin: React.FC = () => {
                                             <td>{product.name}</td>
                                             <td>{product.price}</td>
                                             <td>{product.stock}</td>
-                                            <td><StatusBadge status={product.status}>{product.status}</StatusBadge></td>
+                                            <td><span className={`status-badge ${product.status}`}>{product.status}</span></td>
                                             <td>{product.sales}</td>
                                             <td>
-                                                <ActionButton>Edit</ActionButton>
-                                                <ActionButton variant="danger">Delete</ActionButton>
+                                                <button className="action-button">Edit</button>
+                                                <button className="action-button danger">Delete</button>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
-                            </Table>
-                        </TableContainer>
-                    </TabContent>
+                            </table>
+                        </div>
+                    </div>
                 );
 
             case "orders":
                 return (
-                    <TabContent>
+                    <div className="tab-content">
                         <h3 style={{ marginBottom: "1.5rem" }}>Order Management</h3>
-                        <TableContainer>
-                            <Table>
+                        <div className="table-container">
+                            <table className="order-table">
                                 <thead>
                                     <tr>
                                         <th>Order ID</th>
@@ -417,26 +151,26 @@ const Admin: React.FC = () => {
                                             <td>{order.id}</td>
                                             <td>{order.customer}</td>
                                             <td>{order.total}</td>
-                                            <td><StatusBadge status={order.status}>{order.status}</StatusBadge></td>
+                                            <td><span className={`status-badge ${order.status}`}>{order.status}</span></td>
                                             <td>{order.date}</td>
                                             <td>
-                                                <ActionButton>View</ActionButton>
-                                                <ActionButton variant="success">Ship</ActionButton>
+                                                <button className="action-button">View</button>
+                                                <button className="action-button success">Ship</button>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
-                            </Table>
-                        </TableContainer>
-                    </TabContent>
+                            </table>
+                        </div>
+                    </div>
                 );
 
             case "users":
                 return (
-                    <TabContent>
+                    <div className="tab-content">
                         <h3 style={{ marginBottom: "1.5rem" }}>User Management</h3>
-                        <TableContainer>
-                            <Table>
+                        <div className="table-container">
+                            <table className="user-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -455,18 +189,18 @@ const Admin: React.FC = () => {
                                             <td>{user.name}</td>
                                             <td>{user.email}</td>
                                             <td>{user.orders}</td>
-                                            <td><StatusBadge status={user.status}>{user.status}</StatusBadge></td>
+                                            <td><span className={`status-badge ${user.status}`}>{user.status}</span></td>
                                             <td>{user.joined}</td>
                                             <td>
-                                                <ActionButton>Edit</ActionButton>
-                                                <ActionButton variant="danger">Block</ActionButton>
+                                                <button className="action-button">Edit</button>
+                                                <button className="action-button danger">Block</button>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
-                            </Table>
-                        </TableContainer>
-                    </TabContent>
+                            </table>
+                        </div>
+                    </div>
                 );
 
             default:
@@ -475,29 +209,29 @@ const Admin: React.FC = () => {
     };
 
     return (
-        <AdminContainer>
-            <AdminHeader>
+        <div className="admin-container">
+            <div className="admin-header">
                 <h1>Admin Dashboard</h1>
                 <p>Manage your e-commerce store efficiently</p>
-            </AdminHeader>
+            </div>
 
-            <AdminTabs>
-                <Tab active={activeTab === "dashboard"} onClick={() => setActiveTab("dashboard")}>
+            <div className="admin-tabs">
+                <button className={`tab ${activeTab === "dashboard" ? "active" : ""}`} onClick={() => setActiveTab("dashboard")}>
                     Dashboard
-                </Tab>
-                <Tab active={activeTab === "products"} onClick={() => setActiveTab("products")}>
+                </button>
+                <button className={`tab ${activeTab === "products" ? "active" : ""}`} onClick={() => setActiveTab("products")}>
                     Products
-                </Tab>
-                <Tab active={activeTab === "orders"} onClick={() => setActiveTab("orders")}>
+                </button>
+                <button className={`tab ${activeTab === "orders" ? "active" : ""}`} onClick={() => setActiveTab("orders")}>
                     Orders
-                </Tab>
-                <Tab active={activeTab === "users"} onClick={() => setActiveTab("users")}>
+                </button>
+                <button className={`tab ${activeTab === "users" ? "active" : ""}`} onClick={() => setActiveTab("users")}>
                     Users
-                </Tab>
-            </AdminTabs>
+                </button>
+            </div>
 
             {renderTabContent()}
-        </AdminContainer>
+        </div>
     );
 };
 
