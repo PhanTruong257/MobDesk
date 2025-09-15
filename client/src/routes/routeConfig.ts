@@ -1,13 +1,13 @@
 // Cấu hình layout cho các routes
 export const routeConfig = {
     // Các trang không cần header và footer
-    noLayoutPages: ['/login'],
+    noLayoutPages: ['/login', '/', '/dashboard'],
 
     // Các trang admin (có thể dùng layout riêng sau này)
     adminPages: ['/admin', '/admin/product-list', '/admin/order-list', '/admin/user-list'],
 
     // Các trang công khai
-    publicPages: ['/', '/products', '/product/:id', '/about', '/contact', '/help', '/category/:category'],
+    publicPages: ['/shop', '/products', '/product/:id', '/about', '/contact', '/help', '/category/:category'],
 
     // Các trang cần đăng nhập
     protectedPages: ['/cart', '/profile']

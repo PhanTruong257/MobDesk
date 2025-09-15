@@ -6,6 +6,7 @@ import Login from '../pages/Login';
 import Profile from '../pages/Profile';
 import Admin from '../pages/Admin';
 import ProductDetails from '../pages/ProductDetails';
+import Dashboard from '../pages/Dashboard';
 import styled from 'styled-components';
 
 const PageContainer = styled.div`
@@ -21,7 +22,9 @@ const PageContainer = styled.div`
 const AppRoutes: React.FC = () => {
     return (
         <Routes>
-            <Route path="/" element={<ProductList />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/shop" element={<ProductList />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
